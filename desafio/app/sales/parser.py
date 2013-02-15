@@ -22,8 +22,7 @@ class TabFileParser(object):
         if self.ignore_first_line:
             self.tab_file.readline()
 
-    def __iter__(self):
-        self.seek()
+    def sales(self):
         assert self.check_file(), u'File is invalid'
         for line in self.tab_file.readlines():
             split = line.split('\t')
@@ -50,13 +49,14 @@ class TabFileParser(object):
         if hasattr(self, '_valid_file'):
             return self._valid_file
 
-        self.seek()
         for line in self.tab_file.readlines():
             split = line.split('\t')
             if len(split) < self.columns:
                 self._valid_file = False
+                self.seek()
                 return False
         self._valid_file = True
+        self.seek()
         return True
 
 

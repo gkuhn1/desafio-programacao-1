@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block container %}
+    <div class="hero-unit">
+      <fieldset>
+        <legend>Sales file upload</legend>
+        <form action="." method="post" enctype="multipart/form-data"
+          class="form-horizontal">
+          {% csrf_token %}
+
+          <div class="control-group {% if form.errors %}error{% endif %}">
+            <label class="control-label" for="inputError">{{ form.file.label }}</label>
+            <div class="controls">
+              {{ form.file }}
+              {% if form.file.errors %}
+              <span class="help-inline">{{ form.file.errors|join:","}}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              <input class="btn btn-large btn-primary" type="submit" value="Submit">
+            </div>
+          </div>
+        </form>
+      </fieldset>
+    </div>
+
+  {% if total_sales %}
+    <div class="alert alert-success fade in">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong>Total gross revenue: </strong> R$ {{ total_sales|floatformat:2 }}
+    </div>
+  {% endif %}
+
+  {% if object_list %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Client name</th>
+          <th>Item description</th>
+          <th>Item price</th>
+          <th>Purchase count</th>
+          <th>Saller address</th>
+          <th>Saller name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in object_list %}
+        <tr>
+          <td>{{ sale.id }}</td>
+          <td>{{ sale.client_name }}</td>
+          <td>{{ sale.item_description }}</td>
+          <td>R$ {{ sale.item_price|floatformat:2 }}</td>
+          <td>{{ sale.purchase_count }}</td>
+          <td>{{ sale.saller_address }}</td>
+          <td>{{ sale.saller_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% endif %}
+
+
+
+{% endblock %}
